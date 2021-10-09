@@ -14,7 +14,7 @@ import (
 func ConnectDB() *mongo.Collection {
 
 	// MongoDB Atlas connection URL
-	clientOptions := options.Client().ApplyURI("mongodb+srv://admin:V41SHnow@testdb.pemba.mongodb.net/testDB?retryWrites=true&w=majority")
+	clientOptions := options.Client().ApplyURI("mongodb+srv://admin:<password>@testdb.pemba.mongodb.net/<database_name>?retryWrites=true&w=majority")
 
 	// Connect to MongoDB
 	client, err := mongo.Connect(context.TODO(), clientOptions)
