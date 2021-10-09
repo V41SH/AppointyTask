@@ -10,6 +10,7 @@ import (
 	"V41SH/instagramAPI/helper"
 	"V41SH/instagramAPI/models"
 
+	"golang.org/x/crypto/bcrypt"
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -22,15 +23,20 @@ var collection = helper.ConnectDB()
 func createUser(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var user models.Users
-
 	_ = json.NewDecoder(r.Body).Decode(&user)
+	
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+    if err != nil {
+        // TODO: Properly handle error
+        log.Fatal(err)
+    }
 
+	user.Password = string(hash)
 	result, err := collection.InsertOne(context.TODO(), user)
 	if err != nil {
 		helper.GetError(err, w)
 		return
 	}
-
 
 	json.NewEncoder(w).Encode(result)
 }
@@ -125,6 +131,5 @@ func main() {
 	r.HandleFunc("/posts/{id}", getPost).Methods("GET")
 	r.HandleFunc("/posts/users/{id}", getUserPosts).Methods("GET")
 
-	//config := helper.GetConfiguration()
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
