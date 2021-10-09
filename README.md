@@ -1,5 +1,5 @@
 # AppointyTask
-This is the Instagram API task made for the Appointy internship task. This is a backend API made in Go.
+This is the Instagram API made for the Appointy internship task. This is a backend API made in Go.
 
 ### Author
 Vaishnav Srinidhi
